@@ -66,7 +66,9 @@ def evaluate(expression, state):
       return (*value, state)
 
     case Sequence(exprs = exprs) | Program(exprs = exprs):
-      pass
+      value, value_type, new_state = evaluate(exprs, state)
+
+      return (value, value_type, new_state)
 
     case Assign(variable=variable, value=value):
 
@@ -181,13 +183,26 @@ def evaluate(expression, state):
           result = left_value or right_value
           
         case _:
-          raise InterpTypeError("Cannot perform logical and on non-boolean operands.")
+          raise InterpTypeError("Cannot perform logical or on non-boolean operands.")
  
       return (result, left_type, new_state)
 
     case Not(expr=expr):
-      pass
+      expr_value, expr_type, new_state = evaluate(expr, state)
+
+      result = None
+
+      match expr_type:
+        case Boolean():
+          if expr_value == True:
+            result = False
+          elif expr_value == False:
+            result = True
+        case _:
+          raise InterpTypeError("Cannot perform logican not on non-boolean operands.")
     
+      return (result, expr_type, new_state)    
+
     case If(condition=condition, true=true, false=false):
       condition_value, condition_type, new_state = evaluate(condition, state)
       true_value, true_type, new_state = evaluate(true, new_state)
@@ -326,7 +341,10 @@ def evaluate(expression, state):
       return (result, Boolean(), new_state)
 
     case While(condition=condition, body=body):
-      pass
+      condition_value, condition_type, new_state = evaluate(condition, state)
+      body_value, body_type, new_state = evaluate(body, new_state)
+      while(condition_value):
+        print(body_value)
 
     case _:
       raise InterpSyntaxError("Unhandled!")
