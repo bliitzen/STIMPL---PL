@@ -191,11 +191,9 @@ def evaluate(expression, state):
     case Not(expr=expr):
       expr_value, expr_type, new_state = evaluate(expr, state)
 
-      result = None
-
       match expr_type:
         case Boolean():
-          result = not expr_value
+          result = not(expr_value)
         case _:
           raise InterpTypeError("Cannot perform logican not on non-boolean operands.")
     
@@ -203,10 +201,6 @@ def evaluate(expression, state):
 
     case If(condition=condition, true=true, false=false):
       condition_value, condition_type, new_state = evaluate(condition, state)
-      
-      false_value, false_type, new_state = evaluate(false, new_state)
-
-      result = None
 
       match condition_type:
         case Boolean():
@@ -346,10 +340,12 @@ def evaluate(expression, state):
         case Boolean():
           while condition_value:
             body_value, body_type, new_state = evaluate(body, new_state)
-            condition_value, condition_type, new_state = evaluate(condition, state)
+            condition_value, condition_type, new_state = evaluate(condition, new_state)
+          return (condition_value, condition_type, new_state) # False after loop
+      
         case _:
           raise InterpSyntaxError("Must be a conditional statement ")
-      return (False, Boolean(), new_state) # False after loop
+      
         
 
     case _:
