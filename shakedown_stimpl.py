@@ -1,3 +1,4 @@
+from stimpl.runtime import run_stimpl
 from stimpl import *
 
 if __name__=='__main__':
