@@ -86,7 +86,9 @@ def evaluate(expression, state):
       new_state = new_state.set_value(variable.variable_name, value_result, value_type)
       return (value_result, value_type, new_state)
 
-    """ADD FUNCTION ADDS TWO ELEMENTS"""
+"""
+ADD FUNCTION ADDS TWO ELEMENTS
+"""
     case Add(left=left, right=right):
       result = 0
       left_result, left_type, new_state = evaluate(left, state)
@@ -104,7 +106,9 @@ def evaluate(expression, state):
 
       return (result, left_type, new_state)
 
-    """SUBTRACT FUNCTION SUBTRACTS ONE ELEMENT FROM THE OTHER"""
+"""
+SUBTRACT FUNCTION SUBTRACTS ONE ELEMENT FROM THE OTHER
+"""
     case Subtract(left=left, right=right):
       result = 0
       left_result, left_type, new_state = evaluate(left, state)
@@ -122,7 +126,9 @@ def evaluate(expression, state):
 
       return (result, left_type, new_state)
 
-    """MULTIPLY FUNCTION MULTIPLIES TWO ELEMENTS"""
+"""
+MULTIPLY FUNCTION MULTIPLIES TWO ELEMENTS
+"""
     case Multiply(left=left, right=right):
       result = 0
       left_result, left_type, new_state = evaluate(left, state)
@@ -140,7 +146,9 @@ def evaluate(expression, state):
 
       return (result, left_type, new_state)
 
-    """DIVIDE FUNCTION DIVIDES ONE ELEMENT BY THE OTHER"""
+"""
+DIVIDE FUNCTION DIVIDES ONE ELEMENT BY THE OTHER
+"""
     case Divide(left=left, right=right):
       result = 0
       left_result, left_type, new_state = evaluate(left, state)
@@ -161,7 +169,9 @@ def evaluate(expression, state):
 
       return (result, left_type, new_state)
 
-    """AND FUNCTION COMPARES TWO ELEMENTS - TRUE WHEN BOTH ELEMENTS TRUE"""
+"""
+AND FUNCTION COMPARES TWO ELEMENTS - TRUE WHEN BOTH ELEMENTS TRUE
+"""
     case And(left=left, right=right):
       left_value, left_type, new_state = evaluate(left, state)
       right_value, right_type, new_state = evaluate(right, new_state)
@@ -178,7 +188,9 @@ def evaluate(expression, state):
  
       return (result, left_type, new_state)
 
-    """OR FUNCTION COMPARES TWO ELEMENTS - TRUE WHEN AT LEAST ONE OR BOTH ARE TRUE"""
+"""
+OR FUNCTION COMPARES TWO ELEMENTS - TRUE WHEN AT LEAST ONE OR BOTH ARE TRUE
+"""
     case Or(left=left, right=right):
       left_value, left_type, new_state = evaluate(left, state)
       right_value, right_type, new_state = evaluate(right, new_state)
@@ -195,7 +207,9 @@ def evaluate(expression, state):
  
       return (result, left_type, new_state)
 
-    """NOT FUNCTION RETURNS THE OPPOSITE BOOLEAN VALUE FROM WHAT WAS INPUT"""
+"""
+NOT FUNCTION RETURNS THE OPPOSITE BOOLEAN VALUE FROM WHAT WAS INPUT
+"""
     case Not(expr=expr):
       expr_value, expr_type, new_state = evaluate(expr, state)
 
@@ -209,7 +223,9 @@ def evaluate(expression, state):
     
       return (result, expr_type, new_state)    
 
-    """IF FUNCTION TAKES A CONDITIONAL AND RETURNS TRUE ARGUMENT IF TRUE AND FALSE IF FALSE"""
+"""
+IF FUNCTION TAKES A CONDITIONAL AND RETURNS TRUE ARGUMENT IF TRUE AND FALSE IF FALSE
+"""
     case If(condition=condition, true=true, false=false):
       condition_value, condition_type, new_state = evaluate(condition, state)
       true_value, true_type, new_state = evaluate(true, new_state)
@@ -227,7 +243,9 @@ def evaluate(expression, state):
 
       return (result, Boolean(), new_state)
 
-    """LT FUNCTION COMPARES TWO ELEMENTS - RETURNS TRUE IF LESS THAN"""
+"""
+LT FUNCTION COMPARES TWO ELEMENTS - RETURNS TRUE IF LESS THAN
+"""
     case Lt(left=left, right=right):
       left_value, left_type, new_state = evaluate(left, state)
       right_value, right_type, new_state = evaluate(right, new_state)
@@ -248,7 +266,9 @@ def evaluate(expression, state):
 
       return (result, Boolean(), new_state)
 
-    """LTE FUNCTION COMPARES TWO ELEMENTS - RETURNS TRUE IF LESS THAN OR EQUAL"""
+"""
+LTE FUNCTION COMPARES TWO ELEMENTS - RETURNS TRUE IF LESS THAN OR EQUAL
+"""
     case Lte(left=left, right=right):
       left_value, left_type, new_state = evaluate(left, state)
       right_value, right_type, new_state = evaluate(right, new_state)
@@ -269,7 +289,9 @@ def evaluate(expression, state):
         
       return (result, Boolean(), new_state)
 
-    """GT FUNCTION COMPARES TWO ELEMENTS - RETURNS TRUE IF GREATER THAN"""
+"""
+GT FUNCTION COMPARES TWO ELEMENTS - RETURNS TRUE IF GREATER THAN
+"""
     case Gt(left=left, right=right):
       left_value, left_type, new_state = evaluate(left, state)
       right_value, right_type, new_state = evaluate(right, new_state)
@@ -290,7 +312,9 @@ def evaluate(expression, state):
         
       return (result, Boolean(), new_state)
 
-    """GTE FUNCTION COMPARES TWO ELEMENTS - RETURNS TRUE IF GREATER THAN OR EQUAL"""
+"""
+GTE FUNCTION COMPARES TWO ELEMENTS - RETURNS TRUE IF GREATER THAN OR EQUAL
+"""
     case Gte(left=left, right=right):
       left_value, left_type, new_state = evaluate(left, state)
       right_value, right_type, new_state = evaluate(right, new_state)
@@ -311,7 +335,9 @@ def evaluate(expression, state):
         
       return (result, Boolean(), new_state)
 
-    """EQ FUNCTION COMPARES TWO ELEMENTS - RETURNS TRUE IF EQUAL"""
+"""
+EQ FUNCTION COMPARES TWO ELEMENTS - RETURNS TRUE IF EQUAL
+"""
     case Eq(left=left, right=right):
       left_value, left_type, new_state = evaluate(left, state)
       right_value, right_type, new_state = evaluate(right, new_state)
@@ -332,7 +358,9 @@ def evaluate(expression, state):
         
       return (result, Boolean(), new_state)
 
-    """NE FUNCTION COMPARES TWO ELEMENTS - RETURNS TRUE IF NOT EQUAL"""
+"""
+NE FUNCTION COMPARES TWO ELEMENTS - RETURNS TRUE IF NOT EQUAL
+"""
     case Ne(left=left, right=right):
       left_value, left_type, new_state = evaluate(left, state)
       right_value, right_type, new_state = evaluate(right, new_state)
@@ -353,7 +381,9 @@ def evaluate(expression, state):
         
       return (result, Boolean(), new_state)
 
-    """WHILE FUNCTION TAKES A CONDITION FOR LOGICAL LOOP - EXECUTES BODY WHEN CONDITION TRUE"""
+"""
+WHILE FUNCTION TAKES A CONDITION FOR LOGICAL LOOP - EXECUTES BODY WHEN CONDITION TRUE
+"""
     case While(condition=condition, body=body):
       condition_value, condition_type, new_state = evaluate(condition, state)
 
