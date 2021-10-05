@@ -113,7 +113,7 @@ def evaluate(expression, state):
             Cannot add {left_type} to {right_type}""")
       
       match left_type:
-        case Integer() | String() | FloatingPoint():
+        case Integer() | FloatingPoint():
           result = left_result - right_result
         case _:
           raise InterpTypeError(f"""Cannot subtract {left_type}s""")
@@ -130,7 +130,7 @@ def evaluate(expression, state):
             Cannot add {left_type} to {right_type}""")
       
       match left_type:
-        case Integer() | String() | FloatingPoint():
+        case Integer() | FloatingPoint():
           result = left_result * right_result
         case _:
           raise InterpTypeError(f"""Cannot multiply {left_type}s""")
@@ -147,11 +147,10 @@ def evaluate(expression, state):
             Cannot add {left_type} to {right_type}""")
       
       match left_type:
-        case Integer() | String() | FloatingPoint():
-          if right_result == 0:
-            raise InterpTypeError(f"""Cannot divide by 0""")
-          
+        case FloatingPoint():
           result = left_result / right_result
+        case Integer():
+          result = left_result // right_result
         case _:
           raise InterpTypeError(f"""Cannot divide {left_type}s""")
 
@@ -204,20 +203,21 @@ def evaluate(expression, state):
 
     case If(condition=condition, true=true, false=false):
       condition_value, condition_type, new_state = evaluate(condition, state)
-      true_value, true_type, new_state = evaluate(true, new_state)
+      
       false_value, false_type, new_state = evaluate(false, new_state)
 
       result = None
 
-      match condition_value:
-        case True:
-          result = true_value
-        case False:
-          result = false_value
+      match condition_type:
+        case Boolean():
+          if condition_value:
+            true_value, true_type, new_state = evaluate(true, new_state)
+            return (true_value, true_type, new_state)
+          else:
+            false_value, false_type, new_state = evaluate(false, new_state)
+            return (false_value, false_type, new_state)
         case _:
-          raise InterpTypeError(f"Cannot perform < on {left_type} type.")
-
-      return (result, Boolean(), new_state)
+          raise InterpTypeError(f"Cannot evaluate if not of type Boolean.")
 
     case Lt(left=left, right=right):
       left_value, left_type, new_state = evaluate(left, state)
@@ -253,7 +253,7 @@ def evaluate(expression, state):
         case Integer() | Boolean() | String() | FloatingPoint():
           result = left_value <= right_value
         case Unit():
-          result = False
+          result = True
         case _:
           raise InterpTypeError(f"Cannot perform <= on {left_type} type.")
         
@@ -293,7 +293,7 @@ def evaluate(expression, state):
         case Integer() | Boolean() | String() | FloatingPoint():
           result = left_value >= right_value
         case Unit():
-          result = False
+          result = True
         case _:
           raise InterpTypeError(f"Cannot perform >= on {left_type} type.")
         
@@ -313,7 +313,7 @@ def evaluate(expression, state):
         case Integer() | Boolean() | String() | FloatingPoint():
           result = left_value == right_value
         case Unit():
-          result = False
+          result = True
         case _:
           raise InterpTypeError(f"Cannot perform == on {left_type} type.")
         
