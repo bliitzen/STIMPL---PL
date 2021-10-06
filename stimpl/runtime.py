@@ -66,9 +66,9 @@ def evaluate(expression, state):
       return (*value, state)
 
     case Sequence(exprs = exprs) | Program(exprs = exprs):
-      new_state = state
-      for i in range(len(exprs)): # loop through expressions
-        value, value_type, new_state = evaluate(exprs[i], new_state)
+      new_state = state #set new state prior to loop to avoid override
+      for i in range(len(exprs)): 
+        value, value_type, new_state = evaluate(exprs[i], new_state) #eval each element in exprs
       
       return (value, value_type, new_state)
 
@@ -147,9 +147,9 @@ def evaluate(expression, state):
             Cannot add {left_type} to {right_type}""")
       
       match left_type:
-        case FloatingPoint():
+        case FloatingPoint():        # Float Division
           result = left_result / right_result
-        case Integer():
+        case Integer():                   # Integer division
           result = left_result // right_result
         case _:
           raise InterpTypeError(f"""Cannot divide {left_type}s""")
@@ -247,7 +247,7 @@ def evaluate(expression, state):
         case Integer() | Boolean() | String() | FloatingPoint():
           result = left_value <= right_value
         case Unit():
-          result = True
+          result = True        # Type Unit always true ( same in Gte() )
         case _:
           raise InterpTypeError(f"Cannot perform <= on {left_type} type.")
         
@@ -338,16 +338,15 @@ def evaluate(expression, state):
 
       match condition_type:
         case Boolean():
-          while condition_value:
+          while condition_value:               # While True, execute body and update condition
             body_value, body_type, new_state = evaluate(body, new_state)
             condition_value, condition_type, new_state = evaluate(condition, new_state)
+            
           return (condition_value, condition_type, new_state) # False after loop
       
         case _:
           raise InterpSyntaxError("Must be a conditional statement ")
-      
         
-
     case _:
       raise InterpSyntaxError("Unhandled!")
   pass
